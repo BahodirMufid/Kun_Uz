@@ -1,0 +1,16 @@
+POST http://localhost:8080/attach/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="quran.jpg"
+
+< C:\Users\bahod\Downloads\quran.jpg
+
+###
+
+GET http://localhost:8080/attach/open_general/d78552c7-00da-4d01-a74c-9aca52d7b293
+
+###
+
+DELETE http://localhost:8080/attach/delete/d78552c7-00da-4d01-a74c-9aca52d7b293
+
