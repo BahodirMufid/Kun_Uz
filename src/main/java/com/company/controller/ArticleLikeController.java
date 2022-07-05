@@ -26,28 +26,24 @@ public class ArticleLikeController {
     private ArticleLikeService articleLikeService;
     @ApiOperation(value = " Like ", notes = "Method for Article Like")
     @PostMapping("/like")
-    public ResponseEntity<Void> like(@RequestBody ArticleLikeDTO dto,
-                                     HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        articleLikeService.articleLike(dto.getArticleId(), profileId);
+    public ResponseEntity<Void> like(@RequestBody ArticleLikeDTO dto) {
+        articleLikeService.articleLike(dto.getArticleId());
         return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = " Dislike ", notes = "Method for Article Dislike")
     @PostMapping("/dislike")
-    public ResponseEntity<Void> dislike(@RequestBody ArticleLikeDTO dto,
-                                        HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        articleLikeService.articleDisLike(dto.getArticleId(), profileId);
+    public ResponseEntity<Void> dislike(@RequestBody ArticleLikeDTO dto) {
+
+        articleLikeService.articleDisLike(dto.getArticleId());
         return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = " Remove ", notes = "Method for Article Remove")
     @PostMapping("/remove")
-    public ResponseEntity<Void> remove(@RequestBody ArticleLikeDTO dto,
-                                       HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        articleLikeService.removeLike(dto.getArticleId(), profileId);
+    public ResponseEntity<Void> remove(@RequestBody ArticleLikeDTO dto
+                                     ) {
+        articleLikeService.removeLike(dto.getArticleId());
         return ResponseEntity.ok().build();
     }
 

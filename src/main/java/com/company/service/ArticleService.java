@@ -6,6 +6,7 @@ import com.company.mapper.ArticleShortInfo;
 import com.company.repository.ArticleRepository;
 import com.company.repository.custom.CustomArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import com.company.dto.CategoryDTO;
 import com.company.dto.ProfileDTO;
@@ -33,6 +34,7 @@ public class ArticleService {
     @Autowired
     private RegionService regionService;
     @Autowired
+    @Lazy
     private ProfileService profileService;
     @Autowired
     private CategoryService categoryService;
@@ -45,7 +47,7 @@ public class ArticleService {
     @Autowired
     private CustomArticleRepository customArticleRepository;
 
-    public ArticleCreateDTO create(ArticleCreateDTO dto, Integer profileId) {
+    public ArticleCreateDTO create(ArticleCreateDTO dto) {
         ArticleEntity entity = new ArticleEntity();
         entity.setTitle(dto.getTitle());
         entity.setContent(dto.getContent());
@@ -58,9 +60,9 @@ public class ArticleService {
         CategoryEntity category = categoryService.get(dto.getCategoryId());
         entity.setCategory(category);
 
-        ProfileEntity moderator = new ProfileEntity();
-        moderator.setId(profileId);
-        entity.setModerator(moderator);
+//        ProfileEntity moderator = new ProfileEntity();
+//        moderator.setId(profileId);
+        entity.setModerator(profileService.getCurrentUser());
         entity.setStatus(ArticleStatus.NOT_PUBLISHED);
 
         articleRepository.save(entity);
@@ -352,7 +354,7 @@ public class ArticleService {
         return dto;
     }
 
-    public void updateByStatus(String articleId, Integer publisherId) {
+    public void updateByStatus(String articleId) {
 
         Optional<ArticleEntity> optional = articleRepository.findById(articleId);
 
@@ -363,7 +365,7 @@ public class ArticleService {
         ArticleEntity articleEntity = optional.get();
         if (articleEntity.getStatus().equals(ArticleStatus.NOT_PUBLISHED)) {
 
-            articleRepository.updateArticleToPublish(ArticleStatus.PUBLISHED, LocalDateTime.now(), new ProfileEntity(publisherId), articleId);
+            articleRepository.updateArticleToPublish(ArticleStatus.PUBLISHED, LocalDateTime.now(), profileService.getCurrentUser(), articleId);
 
         } else if (articleEntity.getStatus().equals(ArticleStatus.PUBLISHED)) {
 

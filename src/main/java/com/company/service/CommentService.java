@@ -29,16 +29,13 @@ public class CommentService {
     @Autowired
     private ProfileService profileService;
 
-    public CommentCreateDTO create(CommentCreateDTO dto, Integer profileId) {
+    public CommentCreateDTO create(CommentCreateDTO dto) {
         CommentEntity entity = new CommentEntity();
         entity.setContent(dto.getContent());
 
         ArticleEntity article = articleService.get(dto.getArticleId());
         entity.setArticle(article);
-
-        ProfileEntity profile = profileService.get(profileId);
-        entity.setProfile(profile);
-
+        entity.setProfile(profileService.getCurrentUser());
 
         commentRepository.save(entity);
 

@@ -32,33 +32,30 @@ public class RegionController {
 
     // SECURE
     @PostMapping("/adm/create")
-    public ResponseEntity<?> create(@RequestBody RegionDTO regionDto,
-                                   HttpServletRequest request) {
-        HttpHeaderUtil.getId(request,ProfileRole.ADMIN);
+    public ResponseEntity<?> create(@RequestBody RegionDTO regionDto) {
+
         regionService.create(regionDto);
         return ResponseEntity.ok().body("Successfully created");
     }
 
     @GetMapping("/adm/list")
-    public ResponseEntity<List<RegionDTO>> getList(HttpServletRequest request) {
-        HttpHeaderUtil.getId(request);
+    public ResponseEntity<List<RegionDTO>> getList() {
+
         List<RegionDTO> list = regionService.getListOnlyForAdmin();
         return ResponseEntity.ok().body(list);
     }
 
     @PutMapping("/adm/update/{id}")
     private ResponseEntity<?> update(@PathVariable("id") Integer id,
-                                     @RequestBody RegionDTO dto,
-                                     HttpServletRequest request) {
-        HttpHeaderUtil.getId(request,ProfileRole.ADMIN);
+                                     @RequestBody RegionDTO dto
+                                      ) {
         regionService.update(id, dto);
         return ResponseEntity.ok().body("Succsessfully updated");
     }
 
     @DeleteMapping("/adm/delete/{id}")
-    private ResponseEntity<?> delete(@PathVariable("id") Integer id,
-                                     HttpServletRequest request) {
-        HttpHeaderUtil.getId(request,ProfileRole.ADMIN);
+    private ResponseEntity<?> delete(@PathVariable("id") Integer id
+                                      ) {
         regionService.delete(id);
         return ResponseEntity.ok().body("Successfully deleted");
     }

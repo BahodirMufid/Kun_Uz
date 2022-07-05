@@ -35,9 +35,9 @@ public class ArticleController {
     public ResponseEntity<?> create(@RequestBody @Valid ArticleCreateDTO articleDTO,
                                     HttpServletRequest request) {
 
-        Integer profileId = HttpHeaderUtil.getId(request, ProfileRole.MODERATOR);
+//        Integer profileId = HttpHeaderUtil.getId(request, ProfileRole.MODERATOR);
 
-        ArticleCreateDTO dto = articleService.create(articleDTO, profileId);
+        ArticleCreateDTO dto = articleService.create(articleDTO);
         return ResponseEntity.ok().body(dto);
     }
 
@@ -45,9 +45,7 @@ public class ArticleController {
     @ApiOperation(value = "Update", notes = "Method for Article Update by description ")
     @PostMapping("/adm/update/{description}")
     public ResponseEntity<?> update(@PathVariable("description") String description,
-                                    @RequestBody ArticleCreateDTO articleDTO,
-                                    HttpServletRequest request) {
-        HttpHeaderUtil.getId(request,ProfileRole.MODERATOR);
+                                    @RequestBody ArticleCreateDTO articleDTO) {
         articleService.update(description, articleDTO);
         return ResponseEntity.ok().body("Successfully updated");
     }
@@ -55,9 +53,8 @@ public class ArticleController {
     //3
     @ApiOperation(value = "Delete", notes = "Method for Article delete by description ")
     @DeleteMapping("/delete/{description}")
-    public ResponseEntity<?> delete(@PathVariable("description") String description,
-                                    HttpServletRequest request) {
-        HttpHeaderUtil.getId(request,ProfileRole.MODERATOR);
+    public ResponseEntity<?> delete(@PathVariable("description") String description) {
+
         articleService.delete(description);
         ResponseEntity<Object> build = ResponseEntity.ok().body("Successfully deleted");
         return build;
@@ -66,10 +63,9 @@ public class ArticleController {
     //4
     @ApiOperation(value = " Publish Article", notes = "Method for Article update by status for Publisher")
     @PutMapping("/adm/status/{id}")
-    public ResponseEntity<Void> updateByStatus(@PathVariable("id") String id,
-                                               HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request, ProfileRole.PUBLISHER);
-        articleService.updateByStatus(id, profileId);
+    public ResponseEntity<Void> updateByStatus(@PathVariable("id") String id) {
+
+        articleService.updateByStatus(id);
         return ResponseEntity.ok().build();
     }
 
@@ -203,9 +199,7 @@ public class ArticleController {
 
     @ApiOperation(value = " Get Article filter ", notes = "Method for Article Filter")
     @PostMapping("/adm/filter")
-    public ResponseEntity<List<ArticleDTO>> getFilter(@RequestBody ArticleFilterDTO dto,
-                                                      HttpServletRequest request) {
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
+    public ResponseEntity<List<ArticleDTO>> getFilter(@RequestBody ArticleFilterDTO dto) {
         List<ArticleDTO> filter = articleService.filter(dto);
         return ResponseEntity.ok().body(filter);
     }

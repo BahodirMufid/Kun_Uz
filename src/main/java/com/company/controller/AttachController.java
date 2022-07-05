@@ -65,10 +65,8 @@ public class AttachController {
 
     @ApiOperation(value = " Delete Attach ", notes = "Method for Delete Attach (Admin) ")
     @DeleteMapping("/adm/delete/{fileName}")
-    public ResponseEntity<?> delete(@PathVariable("fileName") String id,
-                                    HttpServletRequest request) {
+    public ResponseEntity<?> delete(@PathVariable("fileName") String id) {
 
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
         String response = attachService.delete(id);
         return ResponseEntity.ok().body(response);
     }

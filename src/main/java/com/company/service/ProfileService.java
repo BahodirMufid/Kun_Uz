@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.config.CustomUserDetails;
 import com.company.dto.ProfileDTO;
 import com.company.dto.ProfileFilterDTO;
 import com.company.entity.AttachEntity;
@@ -12,6 +13,7 @@ import com.company.exps.BadRequestException;
 import com.company.exps.ItemNotFoundException;
 import com.company.repository.ProfileRepository;
 import com.company.repository.custom.CustomProfileRepository;
+import com.company.util.CurrentUser;
 import org.springframework.data.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +74,11 @@ public class ProfileService {
         return responseDTO;
     }
 
+    public ProfileEntity getCurrentUser(){
+        CustomUserDetails currentUser = CurrentUser.getCurrentUser();
+       return currentUser.getProfile();
+    }
+
     public List<ProfileDTO> getList() {
         Iterable<ProfileEntity> all = profileRepository.findAllByVisible(true);
         List<ProfileDTO> dtoList = new LinkedList<>();
@@ -86,9 +93,9 @@ public class ProfileService {
         return dtoList;
     }
 
-    public void update(Integer pId, ProfileDTO dto) {
+    public void update(ProfileDTO dto) {
 
-        Optional<ProfileEntity> profile = profileRepository.findById(pId);
+        Optional<ProfileEntity> profile = profileRepository.findById(getCurrentUser().getId());
 
         if (profile.isEmpty()) {
             throw new ItemNotFoundException("Profile Not Found ");

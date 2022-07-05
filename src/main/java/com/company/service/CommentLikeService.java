@@ -18,13 +18,15 @@ public class CommentLikeService {
     private CommentLikeRepository commentlikeRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    ProfileService profileService;
 
-    public void commentLike(Integer commentId, Integer pId) {
-        likeDislike(commentId, pId, LikeStatus.LIKE);
+    public void commentLike(Integer commentId) {
+        likeDislike(commentId, profileService.getCurrentUser().getId(), LikeStatus.LIKE);
     }
 
-    public void commentDisLike(Integer commentId, Integer pId) {
-        likeDislike(commentId, pId, LikeStatus.DISLIKE);
+    public void commentDisLike(Integer commentId) {
+        likeDislike(commentId, profileService.getCurrentUser().getId(), LikeStatus.DISLIKE);
     }
 
     private void likeDislike(Integer commentId, Integer pId, LikeStatus status) {
@@ -47,11 +49,11 @@ public class CommentLikeService {
         commentlikeRepository.save(like);
     }
 
-    public void removeLike(Integer commentId, Integer pId) {
+    public void removeLike(Integer commentId) {
        /* Optional<ArticleLikeEntity> optional = commentlikeRepository.findExists(articleId, pId);
         optional.ifPresent(articleLikeEntity -> {
             commentlikeRepository.delete(articleLikeEntity);
         });*/
-        commentlikeRepository.delete(commentId, pId);
+        commentlikeRepository.delete(commentId, profileService.getCurrentUser().getId());
     }
 }

@@ -36,20 +36,15 @@ public class ArticleTypeController {
     // SECURED
     @ApiOperation(value = " Create Type  ", notes = "Method for Create Type by Admin")
     @PostMapping("/adm/create")
-    public ResponseEntity<?> create(@RequestBody TypesDTO typesDto,
-                                    HttpServletRequest request) {
+    public ResponseEntity<?> create(@RequestBody TypesDTO typesDto) {
 
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
         typesService.create(typesDto);
         return ResponseEntity.ok().body("Successfully updated");
     }
 
     @ApiOperation(value = " Get Type List ", notes = "Method for Get Type List by Admin")
     @GetMapping("/adm/list")
-    public ResponseEntity<List<TypesDTO>> getList(HttpServletRequest request) {
-
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
-
+    public ResponseEntity<List<TypesDTO>> getList() {
         List<TypesDTO> list = typesService.getListOnlyForAdmin();
         return ResponseEntity.ok().body(list);
     }
@@ -57,19 +52,14 @@ public class ArticleTypeController {
     @ApiOperation(value = " Update Type ", notes = "Method for Update Type by Admin")
     @PutMapping("/adm/{id}")
     private ResponseEntity<?> update(@PathVariable("id") Integer id,
-                                     @RequestBody RegionDTO dto,
-                                     HttpServletRequest request) {
-
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
+                                     @RequestBody RegionDTO dto) {
         typesService.update(id, dto);
         return ResponseEntity.ok().body("Successfully updated");
     }
 
     @ApiOperation(value = " Delete Type ", notes = "Method for Delete Type by Admin")
     @DeleteMapping("/adm/{id}")
-    private ResponseEntity<?> delete(@PathVariable("id") Integer id,
-                                     HttpServletRequest request) {
-        HttpHeaderUtil.getId(request ,ProfileRole.ADMIN);
+    private ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         typesService.delete(id);
         return ResponseEntity.ok().body("Successfully deleted");
     }

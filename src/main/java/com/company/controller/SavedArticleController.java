@@ -22,29 +22,26 @@ public class SavedArticleController {
 
     @ApiOperation(value = " Save Article ", notes = "Method for Save Article")
     @PostMapping("/save")
-    public ResponseEntity<Void> articleSave(@RequestBody SavedArticleDTO dto,
-                                            HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        savedArticleService.articleSave(dto.getArticleId(), profileId);
+    public ResponseEntity<Void> articleSave(@RequestBody SavedArticleDTO dto
+                                             ) {
+        savedArticleService.articleSave(dto.getArticleId());
         return ResponseEntity.ok().build();
     }
 
 
 //    @PostMapping("/notSave")
-//    public ResponseEntity<Void> ArticleNotSave(@RequestBody SavedArticleDTO dto,
-//                                               HttpServletRequest request) {
-//        Integer profileId = HttpHeaderUtil.getId(request);
-//        savedArticleService.articleNotSave(dto.getArticleId(), profileId);
+//    public ResponseEntity<Void> ArticleNotSave(@RequestBody SavedArticleDTO dto
+//                                                ) {
+//        savedArticleService.articleNotSave(dto.getArticleId());
 //        return ResponseEntity.ok().build();
 //    }
 
 
     @ApiOperation(value = "Remove Save Article ", notes = "Method for Remove Save Article")
     @PostMapping("/remove")
-    public ResponseEntity<Void> remove(@RequestBody SavedArticleDTO dto,
-                                       HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        savedArticleService.removeLike(dto.getArticleId(), profileId);
+    public ResponseEntity<Void> remove(@RequestBody SavedArticleDTO dto
+                                        ) {
+        savedArticleService.removeLike(dto.getArticleId());
         return ResponseEntity.ok().build();
     }
 }

@@ -27,13 +27,15 @@ public class SavedArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private ProfileService profileService;
 
-    public void articleSave(String articleId, Integer pId) {
-        likeDislike(articleId, pId, SaveArticleStatus.SAVED);
+    public void articleSave(String articleId) {
+        likeDislike(articleId, profileService.getCurrentUser().getId(), SaveArticleStatus.SAVED);
     }
 
-//    public void articleNotSave(String articleId, Integer pId) {
-//        likeDislike(articleId, pId, SaveArticleStatus.NOT_SAVED);
+//    public void articleNotSave(String articleId) {
+//        likeDislike(articleId, profileService.getCurrentUser().getId(), SaveArticleStatus.NOT_SAVED);
 //    }
 
 
@@ -57,12 +59,12 @@ public class SavedArticleService {
         savedArticleRepository.save(like);
     }
 
-    public void removeLike(String articleId, Integer pId) {
+    public void removeLike(String articleId) {
        /* Optional<ArticleLikeEntity> optional = articleLikeRepository.findExists(articleId, pId);
         optional.ifPresent(articleLikeEntity -> {
             articleLikeRepository.delete(articleLikeEntity);
         });*/
-        savedArticleRepository.delete(articleId, pId);
+        savedArticleRepository.delete(articleId, profileService.getCurrentUser().getId());
     }
 
 

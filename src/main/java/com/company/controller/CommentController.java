@@ -29,10 +29,8 @@ public class CommentController {
     //ADMIN
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody CommentCreateDTO articleDTO,
-                                    HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        commentService.create(articleDTO, profileId);
+    public ResponseEntity<?> create(@RequestBody CommentCreateDTO articleDTO) {
+        commentService.create(articleDTO);
         return ResponseEntity.ok().body("Successfully created");
     }
 

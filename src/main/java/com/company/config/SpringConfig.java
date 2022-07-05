@@ -5,35 +5,46 @@ package com.company.config;
 // MONTH -> 06
 // DAY -> 29
 
+import com.company.util.Md5Util;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class SpringConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //Authentication
         // deMUFID -> dem1234
         // Mufid -> muf4647
 
-        auth.inMemoryAuthentication()
-                .withUser("deMUFID").password("{bcrypt}$2a$10$M86UkzconJlQ22whUSu1kOsiiJVRvIlRjdL3.cIIPfL2hmVYlUei2").roles("ADMIN")
-                .and()
-                .withUser("Mufid").password("{bcrypt}$2a$10$vXDAHRowkNpBaGO8Vacw3.h6rz3T2Ky0DkcVpKIWf.Jotcz4yLak2").roles("USER");
+//        auth.inMemoryAuthentication()
+//                .withUser("mufid@mail.ru").password("{noop}4647").roles("ADMIN")
+//                .and()
+//                .withUser("qobil@gmail.com").password("{noop}1111").roles("PUBLISHER")
+//                .and()
+//                .withUser("otabek@mail.ru").password("{noop}1234").roles("MODERATOR");
 
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    // Authorization
+        // Authorization
 
         http.authorizeHttpRequests()
                 .antMatchers("/article/*").permitAll()
-                .antMatchers("/article/adm/*").hasAnyRole("MODERATOR","ADMIN","PUBLISHER")
+                .antMatchers("/article/adm/*").hasAnyRole("MODERATOR", "ADMIN", "PUBLISHER")
                 .antMatchers("/profile/adm/*").hasRole("ADMIN")
                 .antMatchers("/profile/*").hasRole("USER")
                 .antMatchers("/article_like/*").hasRole("USER")
@@ -51,9 +62,31 @@ public class SpringConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/region/adm/*").hasRole("ADMIN")
                 .antMatchers("/article_save/*").hasRole("USER")
                 .anyRequest().authenticated()
-                .and()
-                .formLogin();
-//                .and().httpBasic();
+//                .and()
+//                .formLogin();
+                .and().httpBasic();
+
+        http.cors().disable();
+        http.csrf().disable();
 
     }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//        return new BCryptPasswordEncoder();
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return rawPassword.toString();
+            }
+
+            // md5 checking matches with database
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                String md5 = Md5Util.getMd5(rawPassword.toString());
+                return md5.equals(encodedPassword);
+            }
+        };
+    }
+
 }

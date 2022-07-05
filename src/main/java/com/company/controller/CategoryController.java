@@ -35,19 +35,16 @@ public class CategoryController {
 
     // SECURED
     @PostMapping("/adm/create")
-    public ResponseEntity<?> create(@RequestBody CategoryDTO categoryDto,
-                                    HttpServletRequest request) {
+    public ResponseEntity<?> create(@RequestBody CategoryDTO categoryDto) {
 
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
 
         categoryService.create(categoryDto);
         return ResponseEntity.ok().body("Successfully created");
     }
 
     @GetMapping("/adm/list")
-    public ResponseEntity<List<CategoryDTO>> getList(HttpServletRequest request) {
+    public ResponseEntity<List<CategoryDTO>> getList() {
 
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
         List<CategoryDTO> list = categoryService.getListOnlyForAdmin();
         return ResponseEntity.ok().body(list);
     }
@@ -55,18 +52,15 @@ public class CategoryController {
 
     @PutMapping("/adm/update/{id}")
     private ResponseEntity<?> update(@PathVariable("id") Integer id,
-                                     @RequestBody CategoryDTO dto,
-                                     HttpServletRequest request) {
+                                     @RequestBody CategoryDTO dto) {
 
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
+
         categoryService.update(id, dto);
         return ResponseEntity.ok().body("Succsessfully updated");
     }
 
     @DeleteMapping("/adm/delete/{id}")
-    private ResponseEntity<?> delete(@PathVariable("id") Integer id,
-                                     HttpServletRequest request) {
-        HttpHeaderUtil.getId(request, ProfileRole.ADMIN);
+    private ResponseEntity<?> delete(@PathVariable("id") Integer id) {
 
         categoryService.delete(id);
         return ResponseEntity.ok().body("Sucsessfully deleted");

@@ -26,62 +26,54 @@ public class ProfileController {
     private ProfileService profileService;
 
     @PostMapping("adm/create")
-    public ResponseEntity<?> create(@RequestBody ProfileDTO profileDto,
-                                    HttpServletRequest request) {
-        HttpHeaderUtil.getId(request , ProfileRole.ADMIN);
+    public ResponseEntity<?> create(@RequestBody ProfileDTO profileDto) {
         ProfileDTO dto = profileService.create(profileDto);
         return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping("adm/auth")
-    public ResponseEntity<List<ProfileDTO>> getProfileList(HttpServletRequest request) {
+    public ResponseEntity<List<ProfileDTO>> getProfileList() {
 
-        HttpHeaderUtil.getId(request , ProfileRole.ADMIN);
+
         List<ProfileDTO> list = profileService.getList();
         return ResponseEntity.ok().body(list);
     }
 
     @PutMapping("/detail")
-    public ResponseEntity<?> update(@RequestBody ProfileDTO dto,
-                                    HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
+    public ResponseEntity<?> update(@RequestBody ProfileDTO dto) {
 
-        profileService.update(profileId, dto);
+
+        profileService.update(dto);
         return ResponseEntity.ok().body("Successfully updated");
     }
 
     @PutMapping("/adm/update/{id}")
     private ResponseEntity<?> update(@PathVariable("id") Integer id,
-                                     @RequestBody ProfileDTO dto,
-                                     HttpServletRequest request) {
-            HttpHeaderUtil.getId(request ,ProfileRole.ADMIN);
-        profileService.update(id, dto);
+                                     @RequestBody ProfileDTO dto) {
+
+        profileService.update(dto);
         return ResponseEntity.ok().body("Successfully updated");
     }
 
     @DeleteMapping("/adm/delete/{id}")
-    private ResponseEntity<?> delete(@PathVariable("id") Integer id,
-                                     HttpServletRequest request) {
-        HttpHeaderUtil.getId(request , ProfileRole.ADMIN);
+    private ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+
         profileService.delete(id);
         return ResponseEntity.ok().body("Successfully deleted");
     }
 
     @GetMapping("/adm/pagination")
         public ResponseEntity<PageImpl> pagination(@RequestParam(value = "page" , defaultValue = "1") int page,
-                                                   @RequestParam(value = "size" ,defaultValue = "5" ) int size,
-                                                   HttpServletRequest request){
-        HttpHeaderUtil.getId(request , ProfileRole.ADMIN);
+                                                   @RequestParam(value = "size" ,defaultValue = "5" ) int size){
+
         PageImpl response = profileService.paginationProfile(page , size);
         return ResponseEntity.ok().body(response);
     }
 
 
     @PostMapping("/adm/filter")
-    public ResponseEntity<List<ProfileDTO>> getFilter(@RequestBody ProfileFilterDTO dto ,
-                                                      HttpServletRequest request) {
+    public ResponseEntity<List<ProfileDTO>> getFilter(@RequestBody ProfileFilterDTO dto) {
 
-        HttpHeaderUtil.getId(request,ProfileRole.ADMIN);
         List<ProfileDTO> filter = profileService.filter(dto);
         return ResponseEntity.ok().body(filter);
     }

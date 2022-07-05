@@ -26,26 +26,22 @@ public class CommentLikeController {
     private CommentLikeService commentLikeService;
 
     @PostMapping("/like")
-    public ResponseEntity<Void> like(@RequestBody CommentLikeDTO dto,
-                                     HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        commentLikeService.commentLike(dto.getCommentId(), profileId);
+    public ResponseEntity<Void> like(@RequestBody CommentLikeDTO dto
+                                   ) {
+
+        commentLikeService.commentLike(dto.getCommentId());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/dislike")
-    public ResponseEntity<Void> dislike(@RequestBody CommentLikeDTO dto,
-                                        HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        commentLikeService.commentDisLike(dto.getCommentId(), profileId);
+    public ResponseEntity<Void> dislike(@RequestBody CommentLikeDTO dto) {
+        commentLikeService.commentDisLike(dto.getCommentId());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<Void> remove(@RequestBody CommentLikeDTO dto,
-                                       HttpServletRequest request) {
-        Integer profileId = HttpHeaderUtil.getId(request);
-        commentLikeService.removeLike(dto.getCommentId(), profileId);
+    public ResponseEntity<Void> remove(@RequestBody CommentLikeDTO dto) {
+        commentLikeService.removeLike(dto.getCommentId());
         return ResponseEntity.ok().build();
     }
 
